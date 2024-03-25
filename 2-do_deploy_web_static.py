@@ -4,8 +4,6 @@ from fabric.api import put, run, env
 from os.path import exists
 
 env.hosts = ["100.25.30.13", "54.90.11.15"]
-# ^ All remote commands must be executed on your both web servers
-# (using env.hosts = ['<IP web-01>', 'IP web-02'] variable in your script)
 
 def do_deploy(archive_path):
     """distributes an archive to the web servers"""
