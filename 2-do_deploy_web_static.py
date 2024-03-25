@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# Fabfile to distribute an archive to a web server.
 from fabric.api import put, run, env
 from os.path import exists
 
@@ -14,8 +15,9 @@ def do_deploy(archive_path):
         file_n = archive_path.split("/")[-1]
         no_ext = file_n.split(".")[0]
         path = "/data/web_static/releases/"
-        print(archive_path)
-        put(archive_path, '/tmp/')
+        print("/tmp/{}".format(file_n))
+        put(archive_path, "/tmp/{}".format(file_n))
+        print("/tmp/{}".format(file_n))
         run('mkdir -p {}{}/'.format(path, no_ext))
         run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
         run('rm /tmp/{}'.format(file_n))
@@ -24,5 +26,6 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
         run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
