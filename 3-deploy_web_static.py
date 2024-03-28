@@ -9,7 +9,7 @@ execute: fab -f 3-deploy_web_static.py deploy -i ~/.ssh/id_rsa -u ubuntu
 from fabric.api import env, local, put, run
 from datetime import datetime
 from os.path import exists, isdir
-env.hosts = ["100.25.30.13", "54.90.11.15"]
+env.hosts = ['54.160.77.90', '10.25.190.21']
 
 
 def do_pack():
@@ -38,12 +38,9 @@ def do_deploy(archive_path):
         run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
         run('rm /tmp/{}'.format(file_n))
         run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
-        print('{0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
         run('rm -rf {}{}/web_static'.format(path, no_ext))
         run('rm -rf /data/web_static/current')
-        run('cp -r {}{} /data/web_static/current'.format(path, no_ext))
         run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
-
         return True
     except:
         return False
@@ -55,23 +52,3 @@ def deploy():
     if archive_path is None:
         return False
     return do_deploy(archive_path)
-
-# printf %s "server {
-#     listen 80 default_server;
-#     listen [::]:80 default_server;
-#     add_header X-Served-By $HOSTNAME;
-#     root   /var/www/html;
-#     index  index.html index.htm;
-#     location /hbnb_static {
-#         alias /data/web_static/current;
-#         index index.html index.htm;
-#     }
-#     location /redirect_me {
-#         return 301 http://cuberule.com/;
-#     }
-#     error_page 404 /404.html;
-#     location /404 {
-#       root /var/www/html;
-#       internal;
-#     }
-# }" > /etc/nginx/sites-available/default
